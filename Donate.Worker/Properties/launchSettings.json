@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Donate.Worker": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
