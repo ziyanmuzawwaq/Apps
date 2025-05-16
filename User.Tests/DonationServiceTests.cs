@@ -1,5 +1,6 @@
 ﻿using Moq;
 using User.Application.Services;
+using User.Domain.Entities.ViewModels;
 using User.Domain.Interfaces;
 
 namespace User.Tests;
@@ -14,9 +15,12 @@ public class DonationServiceTests
 
         var service = new DonationService(mockRepo.Object);
 
-        var result = await Task.Run(() => service.GetDonationByUserId(userId));
+        mockRepo.Setup(r => r.GetByUserId(userId))
+                .ReturnsAsync(new List<DonationViewModel> { new DonationViewModel { UserId = userId, Amount = 5000 } });
 
-        Assert.NotNull(result);
+        var result = await service.GetDonationByUserId(userId);
+
+        Assert.NotEmpty(result);
     }
 
     [Fact]
@@ -25,9 +29,12 @@ public class DonationServiceTests
         var userId = 123;
         var mockRepo = new Mock<IDonationRepository>();
 
+        mockRepo.Setup(r => r.GetByUserId(userId))
+                .ReturnsAsync(new List<DonationViewModel>());
+
         var service = new DonationService(mockRepo.Object);
 
-        var result = await Task.Run(() => service.GetDonationByUserId(userId));
+        var result = await service.GetDonationByUserId(userId);
 
         Assert.Empty(result);
     }
